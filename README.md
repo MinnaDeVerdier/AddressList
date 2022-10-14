@@ -1,4 +1,4 @@
-# PhoneListApp
+# AddressList
 
 Ett tomt programskal för att lägga till objekt och skapa en telefonlista.
 
