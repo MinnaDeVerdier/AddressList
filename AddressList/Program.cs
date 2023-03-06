@@ -10,13 +10,12 @@ namespace AddressList
         class Person
         {
             private string name, phone, address;
-            public Person(string newName, string newPhone, string newAddress)
-            {
-                this.name = newName;
-                this.phone = newPhone;
-                this.address = newAddress;
+            public Person(string newName, string newPhone, string newAddress) {
+            this.name = newName;
+            this.phone = newPhone;
+            this.address = newAddress;
             }
-            public static void Print(Person p)
+            public static void Print (Person p)
             { WriteLine($"Namn: {p.name} \nTelefon: {p.phone}\nAdress: {p.address}\n"); }
         }
         static void Main(string[] args)
@@ -46,8 +45,28 @@ namespace AddressList
                             WriteLine($"Namn: {parts[0]}\nTelefon: {parts[1]}\nAdress: {parts[2]}\n");
                             //5
                             Person p = new Person(parts[0], parts[1], parts[2]);
+                            //7
+                            AddressList.Add(p);
                         }
                     }
+
+                }
+                //8
+                else if (command == "list")
+                {
+                    foreach (Person p in AddressList)
+                        Person.Print(p);
+                }
+                //9
+                else if (command == "add")
+                {
+                    Write("Namn: ");
+                    string n=ReadLine();
+                    Write("Telefonnummer: ");
+                    string p=ReadLine();
+                    Write("Adress: ");
+                    string a=ReadLine();
+                    AddressList.Add(new Person(n, p, a));
                 }
                 else if (command == "quit")
                 {
@@ -57,12 +76,8 @@ namespace AddressList
                 {
                     WriteLine($"Okänt kommando: {command}");
                 }
-
             } while (command != "quit");
-
             WriteLine("Hej då!");
-
         }
-
     }
 }
