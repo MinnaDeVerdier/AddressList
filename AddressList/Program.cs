@@ -1,27 +1,26 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using static System.Console;
-//1
 namespace AddressList
 {
     internal class Program
     {
-        //6
         static List<Person> AddressList = new List<Person>(20);
-        //5
         class Person
         {
             public string name { get; private set; }
             public string phone { get; private set; }
             public string address { get; private set; }
-            public Person(string newName, string newPhone, string newAddress) {
-            this.name = newName;
-            this.phone = newPhone;
-            this.address = newAddress;
+            public Person(string newName, string newPhone, string newAddress)
+            {
+                this.name = newName;
+                this.phone = newPhone;
+                this.address = newAddress;
             }
-            public static void Print (Person p)
+            public static void Print(Person p)
             { WriteLine($"Namn: {p.name} \nTelefon: {p.phone}\nAdress: {p.address}\n"); }
-
         }
         static void Main(string[] args)
         {
@@ -34,43 +33,26 @@ namespace AddressList
                 command = ReadLine();
                 if (command == "help")
                 {
-                    WriteLine($"Tyvärr ej implementerat!");
+                    Help();
                 }
-                //2
                 else if (command == "load")
                 {
-                    //3
-                    using (StreamReader sr = new StreamReader("adresser.txt"))
-                    {
-                        string line;
-                        //4
-                        while ((line = sr.ReadLine()) != null)
-                        {
-                            string[] parts = line.Split(',');
-                            WriteLine($"Namn: {parts[0]}\nTelefon: {parts[1]}\nAdress: {parts[2]}\n");
-                            //5
-                            Person p = new Person(parts[0], parts[1], parts[2]);
-                            //7
-                            AddressList.Add(p);
-                        }
-                    }
-
+                    Write("Tryck enter för att ladda upp default-fil, annars skriv filens sökväg: ");
+                    Load(ReadLine());
                 }
-                //8
                 else if (command == "list")
                 {
                     foreach (Person p in AddressList)
                         Person.Print(p);
                 }
-                //9
                 else if (command == "add")
                 {
                     Write("Namn: ");
-                    string n=ReadLine();
+                    string n = ReadLine();
                     Write("Telefonnummer: ");
-                    string p=ReadLine();
+                    string p = ReadLine();
                     Write("Adress: ");
-                    string a=ReadLine();
+                    string a = ReadLine();
                     AddressList.Add(new Person(n, p, a));
                     WriteLine("Glöm inte att spara dina ändringar med \"save\".");
                 }
@@ -80,9 +62,9 @@ namespace AddressList
                     Write("Namnge filen att spara i, avsluta med \".txt\" : ");
                     using (StreamWriter sw = new StreamWriter(ReadLine(), false))
                     {
-                        foreach(Person p in AddressList)
-                        {                            
-                            string[] person = {p.name, p.phone, p.address};
+                        foreach (Person p in AddressList)
+                        {
+                            string[] person = { p.name, p.phone, p.address };
                             sw.WriteLine(String.Join(", ", person));
                         }
                     }
@@ -91,8 +73,8 @@ namespace AddressList
                 else if (command == "delete")
                 {
                     Write("Vem ska raderas: ");
-                    string n = ReadLine();                    
-                    int i=AddressList.FindIndex(x => x.name.Contains(n));
+                    string n = ReadLine();
+                    int i = AddressList.FindIndex(x => x.name.Contains(n));
                     AddressList.RemoveAt(i);
                     WriteLine("Glöm inte att spara dina ändringar med \"save\".");
                 }
@@ -107,5 +89,36 @@ namespace AddressList
             } while (command != "quit");
             WriteLine("Hej då!");
         }
+        public static void Help()
+        {
+            WriteLine("load - lagrar adresser från valfri lokal fil, eller från defaultfil" +
+            "add - lagrar nya adresser i programmet" +
+            "list - skriver ut de lagrade adresserna i programmet" +
+            "delete - tar bort valfri adress ut programmet" +
+            "save - sparar lagrade adresser till default eller valfri fil" +
+            "quit - avslutar utan att spara lagrade adresser");
+        }
+        public static void Load(string path = null)
+        {
+            string filepath;
+            if (path == null)
+                filepath = $"{Environment.GetEnvironmentVariable("USERPROFILE")}\\Documents\\adresser.txt";
+            else
+                filepath = path;
+            WriteLine("Laddar upp filen\n...");
+            using (StreamReader sr = new StreamReader(filepath))
+            {
+                string line = sr.ReadLine();
+                while (line != null)
+                {
+                    string[] parts = line.Split(',');
+                    WriteLine($"Namn: {parts[0]}\nTelefon: {parts[1]}\nAdress: {parts[2]}\n");
+                    Person p = new Person(parts[0], parts[1], parts[2]);
+                    AddressList.Add(p);
+                }
+            }
+        }
     }
-}
+}        
+             
+    
