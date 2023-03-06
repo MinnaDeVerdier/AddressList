@@ -1,4 +1,6 @@
-﻿using static System.Console;
+﻿using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using static System.Console;
 //1
 namespace AddressList
 {
@@ -19,6 +21,7 @@ namespace AddressList
             }
             public static void Print (Person p)
             { WriteLine($"Namn: {p.name} \nTelefon: {p.phone}\nAdress: {p.address}\n"); }
+
         }
         static void Main(string[] args)
         {
@@ -69,6 +72,7 @@ namespace AddressList
                     Write("Adress: ");
                     string a=ReadLine();
                     AddressList.Add(new Person(n, p, a));
+                    WriteLine("Glöm inte att spara dina ändringar med \"save\".");
                 }
                 //10
                 else if (command == "save")
@@ -82,6 +86,15 @@ namespace AddressList
                             sw.WriteLine(String.Join(", ", person));
                         }
                     }
+                }
+                //11
+                else if (command == "delete")
+                {
+                    Write("Vem ska raderas: ");
+                    string n = ReadLine();                    
+                    int i=AddressList.FindIndex(x => x.name.Contains(n));
+                    AddressList.RemoveAt(i);
+                    WriteLine("Glöm inte att spara dina ändringar med \"save\".");
                 }
                 else if (command == "quit")
                 {
