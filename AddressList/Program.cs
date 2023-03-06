@@ -9,7 +9,9 @@ namespace AddressList
         //5
         class Person
         {
-            private string name, phone, address;
+            public string name { get; private set; }
+            public string phone { get; private set; }
+            public string address { get; private set; }
             public Person(string newName, string newPhone, string newAddress) {
             this.name = newName;
             this.phone = newPhone;
@@ -67,6 +69,19 @@ namespace AddressList
                     Write("Adress: ");
                     string a=ReadLine();
                     AddressList.Add(new Person(n, p, a));
+                }
+                //10
+                else if (command == "save")
+                {
+                    Write("Namnge filen att spara i, avsluta med \".txt\" : ");
+                    using (StreamWriter sw = new StreamWriter(ReadLine(), false))
+                    {
+                        foreach(Person p in AddressList)
+                        {                            
+                            string[] person = {p.name, p.phone, p.address};
+                            sw.WriteLine(String.Join(", ", person));
+                        }
+                    }
                 }
                 else if (command == "quit")
                 {
